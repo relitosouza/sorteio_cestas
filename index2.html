@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio Cestas</title>
+    <style>
+        :root {
+            --primary-color: #6366f1;
+            --secondary-color: #4f46e5;
+            --background-start: #0f172a;
+            --background-end: #1e293b;
+            --text-color: #f8fafc;
+            --card-bg: #334155;
+            --winner-color: #fbbf24;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            color: var(--text-color);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Header */
+        header {
+            margin-top: 2rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        h1 { margin: 0; font-size: 2.5rem; color: var(--winner-color); }
+        p { opacity: 0.7; margin-top: 5px; }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            display: flex;
+            width: 90%;
+            max-width: 1000px;
+            gap: 2rem;
+            padding: 2rem;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Área do Sorteio (Esquerda) */
+        .draw-area {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            height: 400px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #display-name {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.1s;
+        }
+
+        .highlight {
+            color: var(--winner-color);
+            transform: scale(1.1);
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+        }
+
+        /* Lista de Vencedores (Direita) */
+        .winners-sidebar {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .winners-sidebar h2 {
+            font-size: 1.2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        #winners-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .winner-item {
+            background: rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.5s ease-out;
+            border-left: 4px solid var(--winner-color);
+        }
+
+        .trophy { font-size: 1.5rem; }
+        .winner-name { font-weight: bold; font-size: 1.1rem; }
+
+        /* Controles (Embaixo) */
+        .controls-area {
+            width: 100%;
+            background: rgba(0,0,0,0.4);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            border: 1px dashed rgba(255,255,255,0.5);
+            display: inline-block;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .custom-file-upload:hover { background: rgba(255,255,255,0.1); }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            transition: all 0.2s;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            background-color: var(--secondary-color);
+        }
+
+        button:active:not(:disabled) { transform: translateY(0); }
+
+        button:disabled {
+            background-color: #64748b;
+            cursor: not-allowed;
+            opacity: 0.7;
+            box-shadow: none;
+        }
+
+        /* Status */
+        #status-msg {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .finished-msg {
+            color: var(--winner-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: pop 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Sorteio Cestas</h1>
+        <p>Sistema de Premiação</p>
+    </header>
+
+    <main>
+        <section class="draw-area">
+            <div id="display-name">Carregue o arquivo...</div>
+        </section>
+
+        <section class="winners-sidebar">
+            <h2>🏆 Ganhadores (<span id="count">0</span>/3)</h2>
+            <ul id="winners-list">
+                </ul>
+        </section>
+    </main>
+
+    <div class="controls-area">
+        <span id="status-msg">Nenhum arquivo carregado</span>
+        
+        <label for="file-input" class="custom-file-upload">
+            📂 Clique para carregar lista (.txt)
+        </label>
+        <input type="file" id="file-input" accept=".txt">
+
+        <button id="draw-btn" disabled>SORTEAR</button>
+    </div>
+
+    <script>
+        /**
+         * Lógica do Sistema Sorteio Cestas
+         * UX/UI Expert Logic
+         */
+        
+        // Estado da Aplicação
+        let namesPool = [];
+        let winners = [];
+        const MAX_WINNERS = 3;
+        let isAnimating = false;
+
+        // Elementos do DOM
+        const displayEl = document.getElementById('display-name');
+        const fileInput = document.getElementById('file-input');
+        const drawBtn = document.getElementById('draw-btn');
+        const winnersListEl = document.getElementById('winners-list');
+        const statusMsg = document.getElementById('status-msg');
+        const countEl = document.getElementById('count');
+
+        // 1. Carregamento do Arquivo
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const content = event.target.result;
+                // Divide por linha e remove espaços vazios
+                namesPool = content.split('\n')
+                    .map(name => name.trim())
+                    .filter(name => name.length > 0);
+
+                if (namesPool.length < MAX_WINNERS) {
+                    alert(`O arquivo precisa ter pelo menos ${MAX_WINNERS} nomes!`);
+                    resetSystem();
+                    return;
+                }
+
+                statusMsg.textContent = `${namesPool.length} participantes carregados.`;
+                displayEl.textContent = "Pronto para Sortear";
+                displayEl.classList.remove('highlight');
+                drawBtn.disabled = false;
+                
+                // Reset visual se recarregar arquivo
+                winners = [];
+                winnersListEl.innerHTML = '';
+                countEl.textContent = '0';
+            };
+            reader.readAsText(file);
+        });
+
+        // 2. Lógica de Sorteio
+        drawBtn.addEventListener('click', () => {
+            if (isAnimating || winners.length >= MAX_WINNERS || namesPool.length === 0) return;
+
+            isAnimating = true;
+            drawBtn.disabled = true;
+            fileInput.disabled = true;
+
+            let counter = 0;
+            const totalShuffles = 30; // Quantas vezes troca o nome antes de parar
+            
+            // Efeito de Roleta (Emoção)
+            const interval = setInterval(() => {
+                // Mostra nomes aleatórios apenas para efeito visual
+                const randomIndex = Math.floor(Math.random() * namesPool.length);
+                displayEl.textContent = namesPool[randomIndex];
+                displayEl.style.opacity = 0.7;
+                
+                counter++;
+                
+                // Finalizar animação e escolher vencedor real
+                if (counter >= totalShuffles) {
+                    clearInterval(interval);
+                    selectWinner();
+                }
+            }, 100); // Velocidade da troca (100ms)
+        });
+
+        function selectWinner() {
+            // Sorteio real
+            const winnerIndex = Math.floor(Math.random() * namesPool.length);
+            const winnerName = namesPool[winnerIndex];
+
+            // Remove da lista de sorteios
+            namesPool.splice(winnerIndex, 1);
+
+            // Adiciona aos vencedores
+            winners.push(winnerName);
+
+            // Atualiza UI Principal
+            displayEl.textContent = winnerName;
+            displayEl.style.opacity = 1;
+            displayEl.classList.add('highlight'); // Efeito visual de vitória
+
+            // Adiciona na lista lateral
+            addWinnerToSidebar(winnerName);
+
+            // Atualiza Estado
+            statusMsg.textContent = `${namesPool.length} participantes restantes.`;
+            isAnimating = false;
+
+            // Verifica se acabou
+            if (winners.length >= MAX_WINNERS) {
+                finalizeRaffle();
+            } else {
+                drawBtn.disabled = false; // Habilita para o próximo
+                setTimeout(() => displayEl.classList.remove('highlight'), 2000);
+            }
+        }
+
+        function addWinnerToSidebar(name) {
+            const li = document.createElement('li');
+            li.className = 'winner-item';
+            li.innerHTML = `
+                <span class="trophy">🏆</span>
+                <span class="winner-name">${name}</span>
+            `;
+            winnersListEl.appendChild(li);
+            countEl.textContent = winners.length;
+        }
+
+        function finalizeRaffle() {
+            drawBtn.disabled = true;
+            drawBtn.textContent = "Sorteio Finalizado";
+            drawBtn.style.backgroundColor = "#64748b";
+            
+            setTimeout(() => {
+                displayEl.innerHTML = "<span class='finished-msg'>🎉 Sorteio Concluído! 🎉</span>";
+            }, 1500);
+        }
+
+        function resetSystem() {
+            namesPool = [];
+            winners = [];
+            drawBtn.disabled = true;
+            statusMsg.textContent = "Nenhum arquivo carregado";
+            displayEl.textContent = "Carregue o arquivo...";
+            winnersListEl.innerHTML = "";
+            countEl.textContent = "0";
+        }
+    </script>
+</body>
+</html>
