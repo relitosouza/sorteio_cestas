@@ -128,7 +128,7 @@
 
         /* Área de Decisão (Botões de Confirmação) */
         #decision-controls {
-            display: none; /* Escondido por padrão */
+            display: none;
             flex-direction: row;
             gap: 20px;
             animation: slideUp 0.3s ease-out;
@@ -182,10 +182,22 @@
             padding: 0;
             margin: 0;
             flex: 1;
-            overflow-y: auto;
+            overflow-y: auto; /* Permite rolagem se a lista for grande */
             display: flex;
             flex-direction: column;
             gap: 15px;
+        }
+
+        /* Estilização da Barra de Rolagem */
+        #winners-list::-webkit-scrollbar {
+            width: 8px;
+        }
+        #winners-list::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+        }
+        #winners-list::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
         }
 
         .winner-item {
@@ -271,7 +283,7 @@
         </section>
 
         <section class="winners-sidebar">
-            <h2>🏆 Ganhadores (<span id="count">0</span>/3)</h2>
+            <h2>🏆 Ganhadores (<span id="count">0</span>/8)</h2>
             <ul id="winners-list"></ul>
         </section>
     </main>
@@ -285,16 +297,16 @@
     <script>
         /**
          * Lógica do Sistema Sorteio Cestas
-         * Com validação de presença
          */
         
         let namesPool = [];
         let winners = [];
-        const MAX_WINNERS = 3;
+        // MUDANÇA AQUI: Quantidade alterada para 8
+        const MAX_WINNERS = 8;
+        
         let isAnimating = false;
-        let pendingWinner = null; // Armazena o ganhador temporário
+        let pendingWinner = null;
 
-        // Elementos DOM
         const displayEl = document.getElementById('display-name');
         const fileInput = document.getElementById('file-input');
         const drawBtn = document.getElementById('draw-btn');
@@ -305,7 +317,6 @@
         const btnConfirm = document.getElementById('btn-confirm');
         const btnReject = document.getElementById('btn-reject');
 
-        // 1. Carregar Arquivo
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -326,7 +337,6 @@
                 displayEl.classList.remove('highlight');
                 drawBtn.disabled = false;
                 
-                // Reset Total
                 winners = [];
                 winnersListEl.innerHTML = '';
                 countEl.textContent = '0';
@@ -335,19 +345,18 @@
             reader.readAsText(file);
         });
 
-        // 2. Iniciar Sorteio
         drawBtn.addEventListener('click', startDraw);
 
         function startDraw() {
             if (isAnimating || winners.length >= MAX_WINNERS || namesPool.length === 0) return;
 
             isAnimating = true;
-            drawBtn.disabled = true; // Desabilita botão principal
-            decisionControls.style.display = 'none'; // Esconde botões de decisão
+            drawBtn.disabled = true;
+            decisionControls.style.display = 'none';
             displayEl.classList.remove('highlight');
 
             let counter = 0;
-            const totalShuffles = 30; // Duração da animação
+            const totalShuffles = 30; 
             
             const interval = setInterval(() => {
                 const randomIndex = Math.floor(Math.random() * namesPool.length);
@@ -362,13 +371,10 @@
             }, 80);
         }
 
-        // 3. Mostrar Ganhador (Pendente de Confirmação)
         function showPendingWinner() {
             const winnerIndex = Math.floor(Math.random() * namesPool.length);
             pendingWinner = namesPool[winnerIndex];
             
-            // Remove do pool imediatamente (para não sair duplicado se rejeitar e rodar de novo)
-            // Se for rejeitado, ele NÃO volta pro pool (pessoa ausente perde a chance)
             namesPool.splice(winnerIndex, 1);
 
             displayEl.textContent = pendingWinner;
@@ -377,20 +383,16 @@
             
             statusMsg.textContent = "Aguardando confirmação...";
             
-            // Mostra os botões de decisão
             decisionControls.style.display = 'flex';
             isAnimating = false;
         }
 
-        // 4. Confirmar Ganhador
         btnConfirm.addEventListener('click', () => {
             if (!pendingWinner) return;
 
-            // Adiciona efetivamente
             winners.push(pendingWinner);
             addWinnerToSidebar(pendingWinner);
             
-            // UI Update
             decisionControls.style.display = 'none';
             displayEl.classList.remove('highlight');
             statusMsg.textContent = `${namesPool.length} restantes na urna.`;
@@ -399,20 +401,15 @@
                 finalizeRaffle();
             } else {
                 displayEl.textContent = "Próximo Sorteio...";
-                drawBtn.disabled = false; // Habilita botão principal para o próximo
+                drawBtn.disabled = false;
             }
             pendingWinner = null;
         });
 
-        // 5. Rejeitar (Ausente) - Sorteia de novo AUTOMATICAMENTE
         btnReject.addEventListener('click', () => {
-            // O pendingWinner já foi removido do array namesPool no passo anterior,
-            // então basta iniciar a animação de novo.
             decisionControls.style.display = 'none';
             statusMsg.textContent = "Sorteando novamente...";
             pendingWinner = null;
-            
-            // Pequeno delay para UX
             setTimeout(() => {
                 startDraw(); 
             }, 300);
