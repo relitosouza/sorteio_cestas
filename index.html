@@ -24,81 +24,88 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; /* Evita barras de rolagem */
         }
 
         /* Header */
         header {
-            margin-top: 2rem;
+            margin-top: 2vh;
             text-align: center;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            letter-spacing: 3px;
+            height: 10vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        h1 { margin: 0; font-size: 2.5rem; color: var(--winner-color); }
-        p { opacity: 0.7; margin-top: 5px; }
+        h1 { margin: 0; font-size: 3rem; color: var(--winner-color); text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        p { opacity: 0.8; margin-top: 5px; font-size: 1.2rem; }
 
-        /* Main Container */
+        /* Main Container - Otimizado para 1920px */
         main {
             flex: 1;
             display: flex;
-            width: 90%;
-            max-width: 1000px;
+            width: 95%;
+            max-width: 1700px; /* Bem mais largo */
             gap: 2rem;
-            padding: 2rem;
+            padding: 1rem;
             align-items: center;
             justify-content: center;
         }
 
         /* Área do Sorteio (Esquerda) */
         .draw-area {
-            flex: 2;
+            flex: 2.5; /* Ocupa mais espaço que a lateral */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            height: 400px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 25px;
+            height: 65vh; /* Altura fixa baseada na tela */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
         }
 
         #display-name {
-            font-size: 3rem;
-            font-weight: bold;
+            font-size: 7rem; /* Fonte Gigante */
+            font-weight: 800;
             text-align: center;
-            padding: 20px;
+            padding: 40px;
+            line-height: 1.1;
             transition: transform 0.1s;
+            word-break: break-word; /* Quebra se o nome for muito longo */
         }
 
         .highlight {
             color: var(--winner-color);
-            transform: scale(1.1);
-            text-shadow: 0 0 20px rgba(251, 191, 36, 0.5);
+            transform: scale(1.15); /* Zoom maior na vitória */
+            text-shadow: 0 0 40px rgba(251, 191, 36, 0.6);
         }
 
         /* Lista de Vencedores (Direita) */
         .winners-sidebar {
             flex: 1;
             background: var(--card-bg);
-            border-radius: 15px;
-            padding: 1.5rem;
-            height: 400px;
+            border-radius: 20px;
+            padding: 2rem;
+            height: 65vh; /* Mesma altura da área principal */
             display: flex;
             flex-direction: column;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .winners-sidebar h2 {
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             border-bottom: 2px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
+            padding-bottom: 15px;
             margin-top: 0;
             text-align: center;
+            color: #e2e8f0;
         }
 
         #winners-list {
@@ -107,101 +114,108 @@
             margin: 0;
             flex: 1;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
 
         .winner-item {
-            background: rgba(0,0,0,0.2);
-            margin-bottom: 10px;
-            padding: 15px;
-            border-radius: 8px;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            animation: slideIn 0.5s ease-out;
-            border-left: 4px solid var(--winner-color);
+            gap: 15px;
+            animation: slideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            border-left: 6px solid var(--winner-color);
+            transition: transform 0.2s;
         }
+        
+        .winner-item:hover { transform: translateX(5px); }
 
-        .trophy { font-size: 1.5rem; }
-        .winner-name { font-weight: bold; font-size: 1.1rem; }
+        .trophy { font-size: 2.5rem; }
+        .winner-name { font-weight: bold; font-size: 1.5rem; }
 
         /* Controles (Embaixo) */
         .controls-area {
+            height: 15vh;
             width: 100%;
-            background: rgba(0,0,0,0.4);
-            padding: 1.5rem;
+            background: rgba(15, 23, 42, 0.95);
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            gap: 0.8rem;
             border-top: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            z-index: 10;
         }
 
-        input[type="file"] {
-            display: none;
-        }
+        input[type="file"] { display: none; }
 
         .custom-file-upload {
-            border: 1px dashed rgba(255,255,255,0.5);
+            border: 1px dashed rgba(255,255,255,0.3);
             display: inline-block;
-            padding: 10px 20px;
+            padding: 8px 20px;
             cursor: pointer;
             border-radius: 5px;
+            font-size: 0.9rem;
             transition: background 0.3s;
+            color: #94a3b8;
         }
 
-        .custom-file-upload:hover { background: rgba(255,255,255,0.1); }
+        .custom-file-upload:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
         button {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
+            padding: 15px 80px; /* Botão mais largo */
+            font-size: 1.5rem; /* Texto do botão maior */
+            border-radius: 60px;
             cursor: pointer;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
             transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         button:hover:not(:disabled) {
-            transform: translateY(-2px);
+            transform: scale(1.05);
             background-color: var(--secondary-color);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
         }
-
-        button:active:not(:disabled) { transform: translateY(0); }
 
         button:disabled {
-            background-color: #64748b;
+            background-color: #475569;
             cursor: not-allowed;
-            opacity: 0.7;
+            opacity: 0.5;
             box-shadow: none;
+            transform: none;
         }
 
-        /* Status */
-        #status-msg {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-bottom: 5px;
-        }
+        #status-msg { color: #94a3b8; font-size: 1rem; }
 
         /* Animations */
         @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
+            from { opacity: 0; transform: translateX(30px); }
             to { opacity: 1; transform: translateX(0); }
         }
 
         @keyframes pop {
             0% { transform: scale(0.5); opacity: 0; }
-            80% { transform: scale(1.1); opacity: 1; }
+            80% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); opacity: 1; }
         }
 
         .finished-msg {
             color: var(--winner-color);
-            font-size: 1.5rem;
+            font-size: 4rem;
             font-weight: bold;
-            animation: pop 0.5s ease-out;
+            animation: pop 0.6s ease-out;
+            text-shadow: 0 0 30px rgba(251, 191, 36, 0.4);
         }
     </style>
 </head>
@@ -209,7 +223,7 @@
 
     <header>
         <h1>Sorteio Cestas</h1>
-        <p>Sistema de Premiação</p>
+        <p>Sistema de Premiação Oficial</p>
     </header>
 
     <main>
@@ -225,29 +239,26 @@
     </main>
 
     <div class="controls-area">
-        <span id="status-msg">Nenhum arquivo carregado</span>
+        <span id="status-msg">Aguardando lista de participantes (.txt)</span>
         
         <label for="file-input" class="custom-file-upload">
-            📂 Clique para carregar lista (.txt)
+            📂 Alterar lista de nomes
         </label>
         <input type="file" id="file-input" accept=".txt">
 
-        <button id="draw-btn" disabled>SORTEAR</button>
+        <button id="draw-btn" disabled>SORTEAR AGORA</button>
     </div>
 
     <script>
         /**
          * Lógica do Sistema Sorteio Cestas
-         * UX/UI Expert Logic
          */
         
-        // Estado da Aplicação
         let namesPool = [];
         let winners = [];
         const MAX_WINNERS = 3;
         let isAnimating = false;
 
-        // Elementos do DOM
         const displayEl = document.getElementById('display-name');
         const fileInput = document.getElementById('file-input');
         const drawBtn = document.getElementById('draw-btn');
@@ -255,7 +266,6 @@
         const statusMsg = document.getElementById('status-msg');
         const countEl = document.getElementById('count');
 
-        // 1. Carregamento do Arquivo
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -263,7 +273,6 @@
             const reader = new FileReader();
             reader.onload = (event) => {
                 const content = event.target.result;
-                // Divide por linha e remove espaços vazios
                 namesPool = content.split('\n')
                     .map(name => name.trim())
                     .filter(name => name.length > 0);
@@ -274,12 +283,11 @@
                     return;
                 }
 
-                statusMsg.textContent = `${namesPool.length} participantes carregados.`;
-                displayEl.textContent = "Pronto para Sortear";
+                statusMsg.textContent = `${namesPool.length} nomes carregados com sucesso.`;
+                displayEl.textContent = "Vamos Começar!";
                 displayEl.classList.remove('highlight');
                 drawBtn.disabled = false;
                 
-                // Reset visual se recarregar arquivo
                 winners = [];
                 winnersListEl.innerHTML = '';
                 countEl.textContent = '0';
@@ -287,7 +295,6 @@
             reader.readAsText(file);
         });
 
-        // 2. Lógica de Sorteio
         drawBtn.addEventListener('click', () => {
             if (isAnimating || winners.length >= MAX_WINNERS || namesPool.length === 0) return;
 
@@ -296,54 +303,45 @@
             fileInput.disabled = true;
 
             let counter = 0;
-            const totalShuffles = 30; // Quantas vezes troca o nome antes de parar
+            // Aumentei um pouco a duração para gerar mais suspense na tela grande
+            const totalShuffles = 40; 
             
-            // Efeito de Roleta (Emoção)
             const interval = setInterval(() => {
-                // Mostra nomes aleatórios apenas para efeito visual
                 const randomIndex = Math.floor(Math.random() * namesPool.length);
                 displayEl.textContent = namesPool[randomIndex];
-                displayEl.style.opacity = 0.7;
+                displayEl.style.opacity = 0.5; // Mais transparência durante o giro
                 
                 counter++;
                 
-                // Finalizar animação e escolher vencedor real
                 if (counter >= totalShuffles) {
                     clearInterval(interval);
                     selectWinner();
                 }
-            }, 100); // Velocidade da troca (100ms)
+            }, 80); // Um pouco mais rápido a troca visual
         });
 
         function selectWinner() {
-            // Sorteio real
             const winnerIndex = Math.floor(Math.random() * namesPool.length);
             const winnerName = namesPool[winnerIndex];
 
-            // Remove da lista de sorteios
             namesPool.splice(winnerIndex, 1);
-
-            // Adiciona aos vencedores
             winners.push(winnerName);
 
-            // Atualiza UI Principal
             displayEl.textContent = winnerName;
             displayEl.style.opacity = 1;
-            displayEl.classList.add('highlight'); // Efeito visual de vitória
+            displayEl.classList.add('highlight');
 
-            // Adiciona na lista lateral
             addWinnerToSidebar(winnerName);
 
-            // Atualiza Estado
-            statusMsg.textContent = `${namesPool.length} participantes restantes.`;
+            statusMsg.textContent = `${namesPool.length} na urna.`;
             isAnimating = false;
 
-            // Verifica se acabou
             if (winners.length >= MAX_WINNERS) {
                 finalizeRaffle();
             } else {
-                drawBtn.disabled = false; // Habilita para o próximo
-                setTimeout(() => displayEl.classList.remove('highlight'), 2000);
+                drawBtn.disabled = false;
+                // Mantém o destaque por mais tempo na tela grande
+                setTimeout(() => displayEl.classList.remove('highlight'), 3000);
             }
         }
 
@@ -355,24 +353,26 @@
                 <span class="winner-name">${name}</span>
             `;
             winnersListEl.appendChild(li);
+            // Scroll automático para o último ganhador se a lista encher
+            winnersListEl.scrollTop = winnersListEl.scrollHeight;
             countEl.textContent = winners.length;
         }
 
         function finalizeRaffle() {
             drawBtn.disabled = true;
-            drawBtn.textContent = "Sorteio Finalizado";
-            drawBtn.style.backgroundColor = "#64748b";
+            drawBtn.textContent = "SORTEIO ENCERRADO";
+            drawBtn.style.backgroundColor = "#475569";
             
             setTimeout(() => {
-                displayEl.innerHTML = "<span class='finished-msg'>🎉 Sorteio Concluído! 🎉</span>";
-            }, 1500);
+                displayEl.innerHTML = "<span class='finished-msg'>🎉 Parabéns aos Ganhadores! 🎉</span>";
+            }, 2500);
         }
 
         function resetSystem() {
             namesPool = [];
             winners = [];
             drawBtn.disabled = true;
-            statusMsg.textContent = "Nenhum arquivo carregado";
+            statusMsg.textContent = "Aguardando arquivo...";
             displayEl.textContent = "Carregue o arquivo...";
             winnersListEl.innerHTML = "";
             countEl.textContent = "0";
