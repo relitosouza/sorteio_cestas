@@ -24,30 +24,68 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden; /* Evita barras de rolagem */
+            overflow: hidden;
         }
 
-        /* Header */
+        /* Header - Agora com Botão ao lado */
         header {
-            margin-top: 2vh;
-            text-align: center;
+            margin-top: 1vh;
+            height: 12vh;
+            width: 90%;
+            display: flex;
+            flex-direction: row; /* Lado a lado */
+            align-items: center;
+            justify-content: center;
+            gap: 3rem; /* Espaço entre texto e botão */
+            padding: 0 2rem;
+        }
+
+        .header-text {
+            text-align: right; /* Texto alinhado à direita do bloco */
             text-transform: uppercase;
             letter-spacing: 3px;
-            height: 10vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
         }
 
-        h1 { margin: 0; font-size: 3rem; color: var(--winner-color); text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        p { opacity: 0.8; margin-top: 5px; font-size: 1.2rem; }
+        h1 { margin: 0; font-size: 3rem; color: var(--winner-color); text-shadow: 0 4px 10px rgba(0,0,0,0.5); line-height: 1; }
+        p { opacity: 0.8; margin: 5px 0 0 0; font-size: 1rem; }
 
-        /* Main Container - Otimizado para 1920px */
+        /* Botão no Header */
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 60px;
+            font-size: 1.5rem;
+            border-radius: 60px;
+            cursor: pointer;
+            font-weight: 800;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            height: fit-content;
+        }
+
+        button:hover:not(:disabled) {
+            transform: scale(1.05);
+            background-color: var(--secondary-color);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
+        }
+
+        button:disabled {
+            background-color: #475569;
+            cursor: not-allowed;
+            opacity: 0.5;
+            box-shadow: none;
+            transform: none;
+        }
+
+        /* Main Container */
         main {
             flex: 1;
             display: flex;
             width: 95%;
-            max-width: 1700px; /* Bem mais largo */
+            max-width: 1700px;
             gap: 2rem;
             padding: 1rem;
             align-items: center;
@@ -56,14 +94,14 @@
 
         /* Área do Sorteio (Esquerda) */
         .draw-area {
-            flex: 2.5; /* Ocupa mais espaço que a lateral */
+            flex: 2.5;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 25px;
-            height: 65vh; /* Altura fixa baseada na tela */
+            height: 70vh; /* Aumentei levemente */
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
@@ -71,18 +109,18 @@
         }
 
         #display-name {
-            font-size: 7rem; /* Fonte Gigante */
+            font-size: 7rem; 
             font-weight: 800;
             text-align: center;
             padding: 40px;
             line-height: 1.1;
             transition: transform 0.1s;
-            word-break: break-word; /* Quebra se o nome for muito longo */
+            word-break: break-word;
         }
 
         .highlight {
             color: var(--winner-color);
-            transform: scale(1.15); /* Zoom maior na vitória */
+            transform: scale(1.15);
             text-shadow: 0 0 40px rgba(251, 191, 36, 0.6);
         }
 
@@ -92,7 +130,7 @@
             background: var(--card-bg);
             border-radius: 20px;
             padding: 2rem;
-            height: 65vh; /* Mesma altura da área principal */
+            height: 70vh;
             display: flex;
             flex-direction: column;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
@@ -136,17 +174,17 @@
         .trophy { font-size: 2.5rem; }
         .winner-name { font-weight: bold; font-size: 1.5rem; }
 
-        /* Controles (Embaixo) */
-        .controls-area {
-            height: 15vh;
+        /* Rodapé de Configuração (Arquivo) */
+        .config-area {
+            height: 10vh;
             width: 100%;
             background: rgba(15, 23, 42, 0.95);
-            padding: 1rem;
+            padding: 0.5rem;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
             justify-content: center;
-            gap: 0.8rem;
+            gap: 2rem;
             border-top: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(10px);
             z-index: 10;
@@ -166,35 +204,6 @@
         }
 
         .custom-file-upload:hover { background: rgba(255,255,255,0.05); color: #fff; }
-
-        button {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 80px; /* Botão mais largo */
-            font-size: 1.5rem; /* Texto do botão maior */
-            border-radius: 60px;
-            cursor: pointer;
-            font-weight: 800;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
-            transition: all 0.2s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        button:hover:not(:disabled) {
-            transform: scale(1.05);
-            background-color: var(--secondary-color);
-            box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
-        }
-
-        button:disabled {
-            background-color: #475569;
-            cursor: not-allowed;
-            opacity: 0.5;
-            box-shadow: none;
-            transform: none;
-        }
 
         #status-msg { color: #94a3b8; font-size: 1rem; }
 
@@ -222,13 +231,17 @@
 <body>
 
     <header>
-        <h1>Sorteio Cestas</h1>
-        <p>Sistema de Premiação Oficial</p>
+        <div class="header-text">
+            <h1>Sorteio Cestas</h1>
+            <p>Sistema de Premiação</p>
+        </div>
+        
+        <button id="draw-btn" disabled>SORTEAR AGORA</button>
     </header>
 
     <main>
         <section class="draw-area">
-            <div id="display-name">Carregue o arquivo...</div>
+            <div id="display-name">Carregue a lista...</div>
         </section>
 
         <section class="winners-sidebar">
@@ -238,15 +251,12 @@
         </section>
     </main>
 
-    <div class="controls-area">
-        <span id="status-msg">Aguardando lista de participantes (.txt)</span>
-        
+    <div class="config-area">
         <label for="file-input" class="custom-file-upload">
-            📂 Alterar lista de nomes
+            📂 Carregar lista (.txt)
         </label>
         <input type="file" id="file-input" accept=".txt">
-
-        <button id="draw-btn" disabled>SORTEAR AGORA</button>
+        <span id="status-msg">Nenhum arquivo</span>
     </div>
 
     <script>
@@ -283,7 +293,7 @@
                     return;
                 }
 
-                statusMsg.textContent = `${namesPool.length} nomes carregados com sucesso.`;
+                statusMsg.textContent = `${namesPool.length} nomes prontos.`;
                 displayEl.textContent = "Vamos Começar!";
                 displayEl.classList.remove('highlight');
                 drawBtn.disabled = false;
@@ -303,13 +313,12 @@
             fileInput.disabled = true;
 
             let counter = 0;
-            // Aumentei um pouco a duração para gerar mais suspense na tela grande
             const totalShuffles = 40; 
             
             const interval = setInterval(() => {
                 const randomIndex = Math.floor(Math.random() * namesPool.length);
                 displayEl.textContent = namesPool[randomIndex];
-                displayEl.style.opacity = 0.5; // Mais transparência durante o giro
+                displayEl.style.opacity = 0.5;
                 
                 counter++;
                 
@@ -317,7 +326,7 @@
                     clearInterval(interval);
                     selectWinner();
                 }
-            }, 80); // Um pouco mais rápido a troca visual
+            }, 80);
         });
 
         function selectWinner() {
@@ -333,14 +342,13 @@
 
             addWinnerToSidebar(winnerName);
 
-            statusMsg.textContent = `${namesPool.length} na urna.`;
+            statusMsg.textContent = `${namesPool.length} restantes.`;
             isAnimating = false;
 
             if (winners.length >= MAX_WINNERS) {
                 finalizeRaffle();
             } else {
                 drawBtn.disabled = false;
-                // Mantém o destaque por mais tempo na tela grande
                 setTimeout(() => displayEl.classList.remove('highlight'), 3000);
             }
         }
@@ -353,18 +361,17 @@
                 <span class="winner-name">${name}</span>
             `;
             winnersListEl.appendChild(li);
-            // Scroll automático para o último ganhador se a lista encher
             winnersListEl.scrollTop = winnersListEl.scrollHeight;
             countEl.textContent = winners.length;
         }
 
         function finalizeRaffle() {
             drawBtn.disabled = true;
-            drawBtn.textContent = "SORTEIO ENCERRADO";
+            drawBtn.textContent = "ENCERRADO";
             drawBtn.style.backgroundColor = "#475569";
             
             setTimeout(() => {
-                displayEl.innerHTML = "<span class='finished-msg'>🎉 Parabéns aos Ganhadores! 🎉</span>";
+                displayEl.innerHTML = "<span class='finished-msg'>🎉 Parabéns! 🎉</span>";
             }, 2500);
         }
 
@@ -372,8 +379,8 @@
             namesPool = [];
             winners = [];
             drawBtn.disabled = true;
-            statusMsg.textContent = "Aguardando arquivo...";
-            displayEl.textContent = "Carregue o arquivo...";
+            statusMsg.textContent = "Nenhum arquivo";
+            displayEl.textContent = "Carregue a lista...";
             winnersListEl.innerHTML = "";
             countEl.textContent = "0";
         }
