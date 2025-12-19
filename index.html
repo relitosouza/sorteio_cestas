@@ -13,6 +13,8 @@
             --text-color: #f8fafc;
             --card-bg: #334155;
             --winner-color: #fbbf24;
+            --success-color: #22c55e;
+            --danger-color: #ef4444;
         }
 
         body {
@@ -27,21 +29,21 @@
             overflow: hidden;
         }
 
-        /* Header - Agora com Botão ao lado */
+        /* Header */
         header {
             margin-top: 1vh;
             height: 12vh;
             width: 90%;
             display: flex;
-            flex-direction: row; /* Lado a lado */
+            flex-direction: row;
             align-items: center;
             justify-content: center;
-            gap: 3rem; /* Espaço entre texto e botão */
+            gap: 3rem;
             padding: 0 2rem;
         }
 
         .header-text {
-            text-align: right; /* Texto alinhado à direita do bloco */
+            text-align: right;
             text-transform: uppercase;
             letter-spacing: 3px;
         }
@@ -49,8 +51,8 @@
         h1 { margin: 0; font-size: 3rem; color: var(--winner-color); text-shadow: 0 4px 10px rgba(0,0,0,0.5); line-height: 1; }
         p { opacity: 0.8; margin: 5px 0 0 0; font-size: 1rem; }
 
-        /* Botão no Header */
-        button {
+        /* Botão Principal */
+        #draw-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
@@ -63,16 +65,15 @@
             transition: all 0.2s;
             text-transform: uppercase;
             letter-spacing: 1px;
-            height: fit-content;
         }
 
-        button:hover:not(:disabled) {
+        #draw-btn:hover:not(:disabled) {
             transform: scale(1.05);
             background-color: var(--secondary-color);
             box-shadow: 0 0 30px rgba(99, 102, 241, 0.7);
         }
 
-        button:disabled {
+        #draw-btn:disabled {
             background-color: #475569;
             cursor: not-allowed;
             opacity: 0.5;
@@ -92,7 +93,7 @@
             justify-content: center;
         }
 
-        /* Área do Sorteio (Esquerda) */
+        /* Área do Sorteio */
         .draw-area {
             flex: 2.5;
             display: flex;
@@ -101,7 +102,7 @@
             justify-content: center;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 25px;
-            height: 70vh; /* Aumentei levemente */
+            height: 70vh;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(255, 255, 255, 0.1);
             position: relative;
@@ -109,22 +110,52 @@
         }
 
         #display-name {
-            font-size: 7rem; 
+            font-size: 7rem;
             font-weight: 800;
             text-align: center;
-            padding: 40px;
+            padding: 20px 40px;
             line-height: 1.1;
             transition: transform 0.1s;
             word-break: break-word;
+            margin-bottom: 20px;
         }
 
         .highlight {
             color: var(--winner-color);
-            transform: scale(1.15);
+            transform: scale(1.1);
             text-shadow: 0 0 40px rgba(251, 191, 36, 0.6);
         }
 
-        /* Lista de Vencedores (Direita) */
+        /* Área de Decisão (Botões de Confirmação) */
+        #decision-controls {
+            display: none; /* Escondido por padrão */
+            flex-direction: row;
+            gap: 20px;
+            animation: slideUp 0.3s ease-out;
+            margin-top: 20px;
+        }
+
+        .decision-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        .decision-btn:hover { transform: translateY(-3px); }
+
+        .btn-confirm { background-color: var(--success-color); }
+        .btn-reject { background-color: var(--danger-color); }
+
+        /* Lista de Vencedores */
         .winners-sidebar {
             flex: 1;
             background: var(--card-bg);
@@ -166,15 +197,12 @@
             gap: 15px;
             animation: slideIn 0.6s cubic-bezier(0.22, 1, 0.36, 1);
             border-left: 6px solid var(--winner-color);
-            transition: transform 0.2s;
         }
-        
-        .winner-item:hover { transform: translateX(5px); }
 
         .trophy { font-size: 2.5rem; }
         .winner-name { font-weight: bold; font-size: 1.5rem; }
 
-        /* Rodapé de Configuração (Arquivo) */
+        /* Rodapé Config */
         .config-area {
             height: 10vh;
             width: 100%;
@@ -191,7 +219,6 @@
         }
 
         input[type="file"] { display: none; }
-
         .custom-file-upload {
             border: 1px dashed rgba(255,255,255,0.3);
             display: inline-block;
@@ -199,25 +226,16 @@
             cursor: pointer;
             border-radius: 5px;
             font-size: 0.9rem;
-            transition: background 0.3s;
             color: #94a3b8;
+            transition: 0.3s;
         }
-
         .custom-file-upload:hover { background: rgba(255,255,255,0.05); color: #fff; }
-
         #status-msg { color: #94a3b8; font-size: 1rem; }
 
-        /* Animations */
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0.5); opacity: 0; }
-            80% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        /* Animações */
+        @keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pop { 0% { transform: scale(0.5); opacity: 0; } 80% { transform: scale(1.2); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
 
         .finished-msg {
             color: var(--winner-color);
@@ -235,26 +253,31 @@
             <h1>Sorteio Cestas</h1>
             <p>Sistema de Premiação</p>
         </div>
-        
         <button id="draw-btn" disabled>SORTEAR AGORA</button>
     </header>
 
     <main>
         <section class="draw-area">
             <div id="display-name">Carregue a lista...</div>
+            
+            <div id="decision-controls">
+                <button id="btn-reject" class="decision-btn btn-reject">
+                    ❌ Ausente (Novo Sorteio)
+                </button>
+                <button id="btn-confirm" class="decision-btn btn-confirm">
+                    ✅ Confirmar Ganhador
+                </button>
+            </div>
         </section>
 
         <section class="winners-sidebar">
             <h2>🏆 Ganhadores (<span id="count">0</span>/3)</h2>
-            <ul id="winners-list">
-                </ul>
+            <ul id="winners-list"></ul>
         </section>
     </main>
 
     <div class="config-area">
-        <label for="file-input" class="custom-file-upload">
-            📂 Carregar lista (.txt)
-        </label>
+        <label for="file-input" class="custom-file-upload">📂 Carregar lista (.txt)</label>
         <input type="file" id="file-input" accept=".txt">
         <span id="status-msg">Nenhum arquivo</span>
     </div>
@@ -262,20 +285,27 @@
     <script>
         /**
          * Lógica do Sistema Sorteio Cestas
+         * Com validação de presença
          */
         
         let namesPool = [];
         let winners = [];
         const MAX_WINNERS = 3;
         let isAnimating = false;
+        let pendingWinner = null; // Armazena o ganhador temporário
 
+        // Elementos DOM
         const displayEl = document.getElementById('display-name');
         const fileInput = document.getElementById('file-input');
         const drawBtn = document.getElementById('draw-btn');
         const winnersListEl = document.getElementById('winners-list');
         const statusMsg = document.getElementById('status-msg');
         const countEl = document.getElementById('count');
+        const decisionControls = document.getElementById('decision-controls');
+        const btnConfirm = document.getElementById('btn-confirm');
+        const btnReject = document.getElementById('btn-reject');
 
+        // 1. Carregar Arquivo
         fileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (!file) return;
@@ -283,9 +313,7 @@
             const reader = new FileReader();
             reader.onload = (event) => {
                 const content = event.target.result;
-                namesPool = content.split('\n')
-                    .map(name => name.trim())
-                    .filter(name => name.length > 0);
+                namesPool = content.split('\n').map(n => n.trim()).filter(n => n.length > 0);
 
                 if (namesPool.length < MAX_WINNERS) {
                     alert(`O arquivo precisa ter pelo menos ${MAX_WINNERS} nomes!`);
@@ -293,73 +321,107 @@
                     return;
                 }
 
-                statusMsg.textContent = `${namesPool.length} nomes prontos.`;
+                statusMsg.textContent = `${namesPool.length} nomes na urna.`;
                 displayEl.textContent = "Vamos Começar!";
                 displayEl.classList.remove('highlight');
                 drawBtn.disabled = false;
                 
+                // Reset Total
                 winners = [];
                 winnersListEl.innerHTML = '';
                 countEl.textContent = '0';
+                decisionControls.style.display = 'none';
             };
             reader.readAsText(file);
         });
 
-        drawBtn.addEventListener('click', () => {
+        // 2. Iniciar Sorteio
+        drawBtn.addEventListener('click', startDraw);
+
+        function startDraw() {
             if (isAnimating || winners.length >= MAX_WINNERS || namesPool.length === 0) return;
 
             isAnimating = true;
-            drawBtn.disabled = true;
-            fileInput.disabled = true;
+            drawBtn.disabled = true; // Desabilita botão principal
+            decisionControls.style.display = 'none'; // Esconde botões de decisão
+            displayEl.classList.remove('highlight');
 
             let counter = 0;
-            const totalShuffles = 40; 
+            const totalShuffles = 30; // Duração da animação
             
             const interval = setInterval(() => {
                 const randomIndex = Math.floor(Math.random() * namesPool.length);
                 displayEl.textContent = namesPool[randomIndex];
                 displayEl.style.opacity = 0.5;
-                
                 counter++;
                 
                 if (counter >= totalShuffles) {
                     clearInterval(interval);
-                    selectWinner();
+                    showPendingWinner();
                 }
             }, 80);
-        });
+        }
 
-        function selectWinner() {
+        // 3. Mostrar Ganhador (Pendente de Confirmação)
+        function showPendingWinner() {
             const winnerIndex = Math.floor(Math.random() * namesPool.length);
-            const winnerName = namesPool[winnerIndex];
-
+            pendingWinner = namesPool[winnerIndex];
+            
+            // Remove do pool imediatamente (para não sair duplicado se rejeitar e rodar de novo)
+            // Se for rejeitado, ele NÃO volta pro pool (pessoa ausente perde a chance)
             namesPool.splice(winnerIndex, 1);
-            winners.push(winnerName);
 
-            displayEl.textContent = winnerName;
+            displayEl.textContent = pendingWinner;
             displayEl.style.opacity = 1;
             displayEl.classList.add('highlight');
-
-            addWinnerToSidebar(winnerName);
-
-            statusMsg.textContent = `${namesPool.length} restantes.`;
+            
+            statusMsg.textContent = "Aguardando confirmação...";
+            
+            // Mostra os botões de decisão
+            decisionControls.style.display = 'flex';
             isAnimating = false;
+        }
+
+        // 4. Confirmar Ganhador
+        btnConfirm.addEventListener('click', () => {
+            if (!pendingWinner) return;
+
+            // Adiciona efetivamente
+            winners.push(pendingWinner);
+            addWinnerToSidebar(pendingWinner);
+            
+            // UI Update
+            decisionControls.style.display = 'none';
+            displayEl.classList.remove('highlight');
+            statusMsg.textContent = `${namesPool.length} restantes na urna.`;
 
             if (winners.length >= MAX_WINNERS) {
                 finalizeRaffle();
             } else {
-                drawBtn.disabled = false;
-                setTimeout(() => displayEl.classList.remove('highlight'), 3000);
+                displayEl.textContent = "Próximo Sorteio...";
+                drawBtn.disabled = false; // Habilita botão principal para o próximo
             }
-        }
+            pendingWinner = null;
+        });
+
+        // 5. Rejeitar (Ausente) - Sorteia de novo AUTOMATICAMENTE
+        btnReject.addEventListener('click', () => {
+            // O pendingWinner já foi removido do array namesPool no passo anterior,
+            // então basta iniciar a animação de novo.
+            decisionControls.style.display = 'none';
+            statusMsg.textContent = "Sorteando novamente...";
+            pendingWinner = null;
+            
+            // Pequeno delay para UX
+            setTimeout(() => {
+                startDraw(); 
+            }, 300);
+        });
 
         function addWinnerToSidebar(name) {
             const li = document.createElement('li');
             li.className = 'winner-item';
-            li.innerHTML = `
-                <span class="trophy">🏆</span>
-                <span class="winner-name">${name}</span>
-            `;
+            li.innerHTML = `<span class="trophy">🏆</span><span class="winner-name">${name}</span>`;
             winnersListEl.appendChild(li);
             winnersListEl.scrollTop = winnersListEl.scrollHeight;
             countEl.textContent = winners.length;
@@ -369,10 +431,11 @@
             drawBtn.disabled = true;
             drawBtn.textContent = "ENCERRADO";
             drawBtn.style.backgroundColor = "#475569";
+            decisionControls.style.display = 'none';
             
             setTimeout(() => {
                 displayEl.innerHTML = "<span class='finished-msg'>🎉 Parabéns! 🎉</span>";
-            }, 2500);
+            }, 1000);
         }
 
         function resetSystem() {
@@ -383,6 +446,7 @@
             displayEl.textContent = "Carregue a lista...";
             winnersListEl.innerHTML = "";
             countEl.textContent = "0";
+            decisionControls.style.display = 'none';
         }
     </script>
 </body>
